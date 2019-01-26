@@ -165,15 +165,18 @@ for i, file in ipairs(project_files) do
 
         -- Update inc paths --
         if proj_table.include_dirs then
-            for k, f in ipairs(proj_table.include_dirs) do
+            local inc_dirs = find_table(proj_table, "include_dirs")
+
+            for k, f in ipairs(inc_dirs) do
     
                 local abs_dir   = path.getabsolute(file)
                 local dir       = path.getdirectory(abs_dir)
                 local new_path  = dir .. "/" .. f
 
-                proj_table.include_dirs[k] = new_path
-
+                inc_dirs[k] = new_path
             end
+
+            proj_table.include_dirs = inc_dirs
         end 
 
         -- Update asset paths --
