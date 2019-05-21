@@ -332,10 +332,14 @@ dep_search(root, curr_proj, projects)
             end
 
             local dep_str = "BUILD_HAS_" .. dep_name .. "="
-            dep_str = string.upper(dep_str)
+            dep_str = string.upper()
+
+            local dep_inc_str = "BUILD_" .. dep_name .. "_INCLUDED="
+            dep_inc_str = string.upper()
             
             if has_dep then 
                 dep_str = dep_str .. "1"
+                table.insert(root.defines, dep_inc_str)
             else
                 dep_str = dep_str .. "0"
             end
