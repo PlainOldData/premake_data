@@ -295,20 +295,6 @@ for i, proj in ipairs(projects) do
     inc_search(proj, proj, projects)
     table.flatten(proj.include_dirs)
 
-    -- for j, dep in ipairs(deps) do
-
-    --     for k, dep_proj in ipairs(projects) do
-
-    --         if(dep_proj.name == dep) then
-    --             table.insert(
-    --                 proj.include_dirs,
-    --                 find_table(dep_proj, "include_dirs_public"))
-                
-    --             proj.include_dirs = table.flatten(proj.include_dirs)
-    --         end
-    --     end
-    -- end
-
 end
 
 
@@ -318,54 +304,48 @@ end
     for libs, and lib dirs
 ]]--
 
+
 print("- library dependencies")
 
 function
 dep_search(root, curr_proj, projects)
 
     for i, dep_name in ipairs(curr_proj.dependencies) do
+
+        has_dep = false;
         
         for j, dep_proj in ipairs(projects) do
 
             if(dep_proj.name == dep_name) then
                 dep_search(root, dep_proj, projects)
 
-                if dep_proj.linkable == true then
-                    
-                    print("insert " .. root.name .. " " .. dep_name)
+                has_dep = true;
 
+                if dep_proj.linkable == true then
                     table.insert(root.links, dep_name)
 
                     local links = find_table(dep_proj, "links")
                     table.insert(root.links, links);
                 end
+
+                break;
             end
+
+            local dep_str = "BUILD_HAS_" .. dep_name .. "="
+            dep_str = string.upper(dep_str)
+            
+            if has_dep then 
+                dep_str = dep_str .. "1"
+            else
+                dep_str = dep_str .. "0"
+            end
+
+            table.insert(root.defines, dep_str)
         end
          
     end
 
 end
-
-
--- function
--- lib_search(root, curr_proj, projects)
-
---     for i, dep_name in ipairs(curr_proj.dependencies) do
-        
---         for j, dep_proj in ipairs(projects) do
-
---             if dep_proj.name == dep_name then
---                 lib_search(root, dep_proj, projects)
-
---                 if dep_proj.linkable == true then
---                     table.insert(root.links, dep_proj.name)
---                 end
---             end
---         end
-         
---     end
-
--- end
 
 
 for i, proj in ipairs(projects) do
