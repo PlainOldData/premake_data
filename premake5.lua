@@ -158,8 +158,7 @@ for i, file in ipairs(project_files) do
                 local dir       = path.getdirectory(abs_dir)
                 local new_path  = dir .. "/" .. f
 
-                proj_table.include_dirs_public[k] = new_path
-            
+                proj_table.include_dirs_public[k] = new_path            
             end
         end
 
@@ -443,6 +442,15 @@ local configs = {
         simd = "SSE2",
         fast_float = "Fast",
         warnings_as_errors = "",
+    },
+    {
+        name = "Development NDEBUG",
+        symbols = "On",
+        optimize = "Off",
+        simd = "SSE2",
+        fast_float = "Fast",
+        warnings_as_errors = "",
+        defines = {"NDEBUG"}
     },
     {
         name = "Staging",
