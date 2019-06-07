@@ -135,6 +135,26 @@ for i, file in ipairs(project_files) do
     -- file can have multiple tables --
     for j, proj_table in ipairs(file_table.projects) do
 
+        -- Check if its optional --
+        if proj_table["optional_on_dir"] then
+            local dir = path.getabsolute(file)
+            dir = path.getdirectory(dir)
+            dir = dir .. "/" .. proj_table["optional_on_dir"];
+
+            if not os.isdir(dir) then
+                printf("Skipping " ..
+                        proj_table.name ..
+                        " in " ..
+                        dir)
+
+                goto skip
+            end
+        end
+
+        if proj_table.linkable == nil then
+            proj_table["linkable"] = true;
+        end
+
         -- Update file paths --
         local files = find_table(proj_table, "files")
 
@@ -209,6 +229,8 @@ for i, file in ipairs(project_files) do
 
         -- Add to list --
         table.insert(projects, proj_table)
+
+        ::skip::
     end
 
     -- Trim projects if we have a target --
