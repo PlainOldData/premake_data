@@ -458,29 +458,37 @@ print("- configs")
 
 local configs = {
     {
-        name = "Development",
+        name = "Debug",
         symbols = "On",
         optimize = "Off",
         simd = "SSE2",
         fast_float = "Fast",
-        warnings_as_errors = "",
+        warnings_as_errors = "Off",
     },
     {
-        name = "Development NDEBUG",
+        name = "Debug WarnAsErr",
         symbols = "On",
         optimize = "Off",
         simd = "SSE2",
         fast_float = "Fast",
-        warnings_as_errors = "",
+        warnings_as_errors = "On",
+    },
+    {
+        name = "Debug NDEBUG",
+        symbols = "On",
+        optimize = "Off",
+        simd = "SSE2",
+        fast_float = "Fast",
+        warnings_as_errors = "Off",
         defines = {"NDEBUG"}
     },
     {
-        name = "Staging",
+        name = "Debug Optimized",
         symbols = "On",
         simd = "SSE2",
         optimize = "On",
         fast_float = "Fast",
-        warnings_as_errors = "FatalWarnings",
+        warnings_as_errors = "On",
     },
     {
         name = "Release",
@@ -488,8 +496,7 @@ local configs = {
         simd = "SSE2",
         optimize = "Full",
         fast_float = "Fast",
-        warnings_as_errors = "FatalWarnings",
-
+        warnings_as_errors = "On",
         defines = {"NDEBUG"}
     },
 }
@@ -638,6 +645,10 @@ for i, proj in ipairs(projects) do
             optimize(config.optimize)
             floatingpoint(config.fast_float)
             architecture("x64")
+
+            if(config.warnings_as_errors == "On") then
+                flags("fatalwarnings")
+            end
 
             if os.target() == "windows" then
                 staticruntime("On")
