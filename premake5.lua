@@ -496,6 +496,15 @@ local configs = {
         simd = "SSE2",
         optimize = "Full",
         fast_float = "Fast",
+        warnings_as_errors = "Off",
+        defines = {"NDEBUG"}
+    },
+    {
+        name = "Release WarnAsErr",
+        symbols = "Off",
+        simd = "SSE2",
+        optimize = "Full",
+        fast_float = "Fast",
         warnings_as_errors = "On",
         defines = {"NDEBUG"}
     },
@@ -648,6 +657,14 @@ for i, proj in ipairs(projects) do
 
             if(config.warnings_as_errors == "On") then
                 flags("fatalwarnings")
+            end
+
+            if(compiler == "msvs") then
+                local warn = {
+                    "4204", -- nonstandard extension used: non-constant aggregate initializer --
+                }
+                
+                disablewarnings(warn);
             end
 
             if os.target() == "windows" then
