@@ -662,6 +662,9 @@ for i, proj in ipairs(projects) do
             if(compiler == "msvs") then
                 local warn = {
                     "4204", -- nonstandard extension used: non-constant aggregate initializer --
+                    "4221", -- nonstandard extension used: cannot be initialized using address of automatic variable --
+                    "4127", -- conditional expression is constant --
+
                 }
                 
                 disablewarnings(warn);
