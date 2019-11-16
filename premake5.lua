@@ -604,13 +604,16 @@ for i, proj in ipairs(projects) do
 
     -- links -- 
 
-    local proj_links = find_table(proj, "links")
+    if(proj.kind ~= "StaticLib") then
 
-    if debug_print then 
-        print("Links: " .. table.tostring(proj_links))
+        local proj_links = find_table(proj, "links")
+
+        if debug_print then 
+            print("Links: " .. table.tostring(proj_links))
+        end
+
+        links(proj_links)
     end
-
-    links(proj_links)
 
     -- Assets --
 
